@@ -1,4 +1,5 @@
 
+
 var values = {'A':1, '2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9, 'T':10, 'J':10, 'Q':10, 'K':10}
 
 
@@ -40,8 +41,24 @@ Deck.prototype.deal = function(){
   return this.deck.pop(0);
 }
 
+
 function newGame(){
-  var newDeck = new Deck();
-  var playerHand = new Hand();
-  var dealerHand = new Hand();
+  deck = new Deck();
+  deck.shuffle();
+  playerHand = new Hand();
+  dealerHand = new Hand();
 }
+
+//front end
+$(document).ready(function(){
+  $("#newGameButton").click(function(){
+    newGame();
+  });
+  $("#hitButton").click(function(){
+    playerHand.addCard(deck.deal())
+    console.log(playerHand)
+  });
+  $("#standButton").click(function(){
+
+  });
+});
