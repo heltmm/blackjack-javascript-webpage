@@ -15,7 +15,7 @@ Hand.prototype.addCard = function(card){
   this.hand.push(card)
 }
 
-//deck object
+//Deck object of cards
 function Deck() {
   this.deck = [];
   var suits = ['C', 'S', 'H', 'D'];
@@ -40,9 +40,8 @@ Deck.prototype.deal = function(){
   return this.deck.pop(0);
 }
 
-var newDeck = new Deck();
-console.log(newDeck)
-newDeck.shuffle()
-console.log(newDeck)
-console.log(newDeck.deal())
-console.log(newDeck)
+function newGame(){
+  var newDeck = new Deck();
+  var playerHand = new Hand();
+  var dealerHand = new Hand();
+}
