@@ -1,8 +1,4 @@
 
-
-
-
-
 //card Object
 function Card(suit, rank){
   this.suit = suit;
@@ -19,6 +15,7 @@ Hand.prototype.addCard = function(card){
 }
 Hand.prototype.getValue = function(){
   var values = {'A':1, '2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9, 'T':10, 'J':10, 'Q':10, 'K':10}
+  this.value = 0;
 
   for(var i =0; i<this.hand.length; i ++){
     this.value += values[this.hand[i].rank]
@@ -27,7 +24,7 @@ Hand.prototype.getValue = function(){
     }
   }if(this.value <=11 && this.hasAce === true){
     this.value += 10;
-  }
+  }return this.value;
 }
 
 //Deck object of cards
@@ -65,12 +62,19 @@ function newGame(){
 
 //front end
 $(document).ready(function(){
+
   $("#newGameButton").click(function(){
     newGame();
+    console.log(playerHand.value)
   });
   $("#hitButton").click(function(){
-    playerHand.addCard(deck.deal())
-    console.log(playerHand)
+    if(playerHand.value < 21){
+      playerHand.addCard(deck.deal())
+      playerHand.getValue();
+
+      console.log(playerHand)
+      console.log(playerHand.value)
+    }
   });
   $("#standButton").click(function(){
 
