@@ -52,7 +52,6 @@ Deck.prototype.deal = function(){
   return this.deck.pop(0);
 }
 
-
 function newGame(){
   deck = new Deck();
   deck.shuffle();
@@ -62,6 +61,12 @@ function newGame(){
 
 //front end
 $(document).ready(function(){
+  //creat basic gui to display cards
+  var canvas = document.getElementById("myCanvas");
+  var ctx = canvas.getContext("2d");
+  var img = document.getElementById("cards");
+  ctx.drawImage(img,10,10);
+
 
   $("#newGameButton").click(function(){
     newGame();
@@ -71,7 +76,6 @@ $(document).ready(function(){
     if(playerHand.value < 21){
       playerHand.addCard(deck.deal())
       playerHand.getValue();
-
       console.log(playerHand)
       console.log(playerHand.value)
     }

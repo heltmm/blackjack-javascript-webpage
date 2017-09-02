@@ -1,9 +1,17 @@
-#table {
-  width: 600px;
-  height: 400px;
-  background-color: green;
+#myCanvas {
   margin: auto;
+  border: 1px solid black;
 }
 body{
   text-align: center;
+}
+#card1 {
+  background-image: url("../img/cards.png");
+}
+.card {
+  width: 72px;
+  height: 96px;
+}
+#cards {
+  display: none;
 }
