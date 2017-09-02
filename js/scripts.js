@@ -29,8 +29,13 @@ Deck.prototype.shuffle = function() {
   }
   return this.deck;
 }
+Deck.prototype.deal = function(){
+  return this.deck.pop(0);
+}
 
 var newDeck = new Deck();
 console.log(newDeck)
 newDeck.shuffle()
+console.log(newDeck)
+console.log(newDeck.deal())
 console.log(newDeck)
