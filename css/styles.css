@@ -1,0 +1,9 @@
+#table {
+  width: 600px;
+  height: 400px;
+  background-color: green;
+  margin: auto;
+}
+body{
+  text-align: center;
+}
