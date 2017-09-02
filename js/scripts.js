@@ -1,6 +1,6 @@
 
 
-var values = {'A':1, '2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9, 'T':10, 'J':10, 'Q':10, 'K':10}
+
 
 
 //card Object
@@ -11,9 +11,23 @@ function Card(suit, rank){
 //hand object
 function Hand(){
   this.hand = [];
+  this.value = 0;
+  this.hasAce = false;
 }
 Hand.prototype.addCard = function(card){
   this.hand.push(card)
+}
+Hand.prototype.getValue = function(){
+  var values = {'A':1, '2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9, 'T':10, 'J':10, 'Q':10, 'K':10}
+
+  for(var i =0; i<this.hand.length; i ++){
+    this.value += values[this.hand[i].rank]
+    if(this.hand[i].rank === 'A'){
+      this.hasAce = true;
+    }
+  }if(this.value <=11 && this.hasAce === true){
+    this.value += 10;
+  }
 }
 
 //Deck object of cards
