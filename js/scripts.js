@@ -1,9 +1,19 @@
-
+var suits = ['C', 'S', 'H', 'D'];
+var ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'];
+var card_size = [72, 96];
 //card Object
 function Card(suit, rank){
   this.suit = suit;
   this.rank = rank;
 }
+Card.prototype.drawCard = function(card){
+  ctx.drawImage(img, (card_size[0] * ranks.indexOf(this.rank)), (card_size[1] * suits.indexOf(this.suit)) , card_size[0], card_size[1], 50, 50, card_size[0], card_size[1])
+  // ctx.drawImage(img, 0, 0, card_size[0], card_size[1], 50, 50, card_size[0], card_size[1])
+  console.log(ranks[this.rank])
+}
+// card_size = [72, 96]
+// context.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
+
 //hand object
 function Hand(){
   this.hand = [];
@@ -30,8 +40,6 @@ Hand.prototype.getValue = function(){
 //Deck object of cards
 function Deck() {
   this.deck = [];
-  var suits = ['C', 'S', 'H', 'D'];
-  var ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'];
   for(var i = 0; i<suits.length; i++ ){
     for(var j = 0; j<ranks.length; j++){
       this.deck.push(new Card(suits[i],ranks[j]))
@@ -57,19 +65,25 @@ function newGame(){
   deck.shuffle();
   playerHand = new Hand();
   dealerHand = new Hand();
+  testCard = new Card('D', 'A')
+  testCard.drawCard();
+  console.log(ranks.indexOf('A'))
 }
 
 //front end
 $(document).ready(function(){
   //creat basic gui to display cards
-  var canvas = document.getElementById("myCanvas");
-  var ctx = canvas.getContext("2d");
-  var img = document.getElementById("cards");
-  ctx.drawImage(img,10,10);
+  canvas = document.getElementById("myCanvas");
+  ctx = canvas.getContext("2d");
+  img = document.getElementById("cards");
+  ctx.drawImage(img, 0, 0, card_size[0], card_size[1], 50, 50, card_size[0], card_size[1])
+  // ctx.drawImage(img,10,10);
 
 
   $("#newGameButton").click(function(){
     newGame();
+    testCard = new Card('D', 'A')
+    testCard.drawCard();
     console.log(playerHand.value)
   });
   $("#hitButton").click(function(){
