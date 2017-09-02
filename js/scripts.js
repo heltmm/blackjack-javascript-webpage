@@ -1,8 +1,10 @@
+//variables used
 var suits = ['C', 'S', 'H', 'D'];
 var ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'];
 var card_size = [72, 96];
 var x_start = 0
 var y_start = 0
+
 //card Object
 function Card(suit, rank){
   this.suit = suit;
@@ -43,7 +45,6 @@ Hand.prototype.drawHand = function(){
     x_start += 80;
   }
 }
-
 //Deck object of cards
 function Deck() {
   this.deck = [];
@@ -67,14 +68,30 @@ Deck.prototype.shuffle = function() {
 Deck.prototype.deal = function(){
   return this.deck.pop(0);
 }
+//game logic
 //resets variables and starts a new game
 function newGame(){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  money = 100;
   deck = new Deck();
   deck.shuffle();
   playerHand = new Hand();
   dealerHand = new Hand();
-
+  $("#cash").html(money)
+}
+function deal(bet){
+  bet = bet
+  money -= bet;
+  $("#cash").html(money)
+  hit();
+  hit();
+}
+function hit(){
+  if(playerHand.value < 21){
+    playerHand.addCard(deck.deal())
+    playerHand.getValue();
+    playerHand.drawHand();
+  }
 }
 
 //front end
@@ -86,18 +103,20 @@ $(document).ready(function(){
 
   $("#newGameButton").click(function(){
     newGame();
-
   });
   $("#hitButton").click(function(){
-    if(playerHand.value < 21){
-      playerHand.addCard(deck.deal())
-      playerHand.getValue();
-      playerHand.drawHand();
-      console.log(playerHand)
-      console.log(playerHand.value)
-    }
+    hit();
   });
   $("#standButton").click(function(){
 
+  });
+  $("#bet5").click(function(){
+    deal(5);
+  });
+  $("#bet10").click(function(){
+    deal(10);
+  });
+  $("#bet20").click(function(){
+    deal(20);
   });
 });
