@@ -44,6 +44,7 @@ Hand.prototype.drawHand = function(){
   }else if (this.user === "Dealer"){
     y_start = 0;
   }
+
   for(var i = 0; i < this.hand.length; i ++){
     this.hand[i].drawCard();
     x_start += 80;
@@ -115,6 +116,7 @@ function hit(hand){
       if(hand.value > 21){
         ctx.fillText(hand.user + " Busted",canvas.width/2, canvas.height/2);
         inPlay = false;
+        clearBet()
       }
     }
   }
@@ -125,7 +127,8 @@ function stand(){
     while(dealerHand.getValue() < 17){
       dealerHand.addCard(deck.deal())
       dealerHand.drawHand()
-    }if (dealerHand.value === 21){
+    }clearBet();
+    if (dealerHand.value === 21){
       ctx.fillText("Dealer Wins",canvas.width/2, canvas.height/2);
     }else if (dealerHand.value > 21){
       ctx.fillText("Dealer Busted",canvas.width/2, canvas.height/2);
@@ -137,10 +140,12 @@ function stand(){
       ctx.fillText('+ $' +(2* currentBet) ,600,110)
     }else if (playerHand.value < dealerHand.value|| playerHand.value === dealerHand.value){
       ctx.fillText("Dealer Wins",canvas.width/2, canvas.height/2);
-    }
+    }clearBet();
   }
 }
-
+function clearBet() {
+  ctx.clearRect(600,270, 100, 70);
+}
 
 //front end
 $(document).ready(function(){
@@ -149,6 +154,7 @@ $(document).ready(function(){
   ctx = canvas.getContext("2d");
   img = document.getElementById("cards");
   money = 100;
+  inPlay = false;
   ctx.font = "30px Arial";
   ctx.fillText('Chips:',600,50);
   ctx.fillText('$' + money,600,80);
