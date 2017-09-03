@@ -85,14 +85,13 @@ function newGame(){
 }
 
 function deal(bet){
-  if(!inPlay){
+  if(!inPlay && bet <= money){
     inPlay = true;
     currentBet = bet
     money -= currentBet;
     deck = new Deck();
     playerHand = new Hand("Player");
     dealerHand = new Hand("Dealer");
-    console.log(currentBet)
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillText('Chips:',600,50);
@@ -127,8 +126,7 @@ function stand(){
     while(dealerHand.getValue() < 17){
       dealerHand.addCard(deck.deal())
       dealerHand.drawHand()
-    }clearBet();
-    if (dealerHand.value === 21){
+    }if (dealerHand.value === 21){
       ctx.fillText("Dealer Wins",canvas.width/2, canvas.height/2);
     }else if (dealerHand.value > 21){
       ctx.fillText("Dealer Busted",canvas.width/2, canvas.height/2);
