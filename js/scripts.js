@@ -39,13 +39,18 @@ Hand.prototype.getValue = function(){
 }
 Hand.prototype.drawHand = function(){
   x_start = 0;
+  y_start = 0;
+  starti = 0;
   if (this.user === "Player"){
     y_start = 304;
-  }else if (this.user === "Dealer"){
+  }else if (this.user === "Dealer" && inPlay === true){
     y_start = 0;
+    starti = 1
+    x_start = 80
+    ctx.drawImage(backImg, 0, 0, card_size[0], card_size[1], 0, 0, card_size[0], card_size[1])
   }
 
-  for(var i = 0; i < this.hand.length; i ++){
+  for(var i = starti; i < this.hand.length; i ++){
     this.hand[i].drawCard();
     x_start += 80;
   }
@@ -123,6 +128,7 @@ function hit(hand){
 function stand(){
   if(inPlay){
     inPlay = false;
+    dealerHand.drawHand()
     while(dealerHand.getValue() < 17){
       dealerHand.addCard(deck.deal())
       dealerHand.drawHand()
@@ -151,6 +157,7 @@ $(document).ready(function(){
   canvas = document.getElementById("myCanvas");
   ctx = canvas.getContext("2d");
   img = document.getElementById("cards");
+  backImg = document.getElementById("cardback")
   money = 100;
   inPlay = false;
   ctx.font = "30px Arial";
