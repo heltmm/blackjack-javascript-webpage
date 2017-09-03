@@ -109,6 +109,15 @@ function deal(bet){
     hit(playerHand);
     hit(dealerHand);
     hit(dealerHand);
+
+    if(playerHand.getValue() === 21){
+      ctx.fillText("BlackJack!",canvas.width/2, canvas.height/2);
+      money += (2*currentBet)
+      ctx.fillText('+ $' +(2* currentBet) ,600,110)
+      inPlay = false;
+      clearBet()
+    }
+
   }
 }
 function hit(hand){
