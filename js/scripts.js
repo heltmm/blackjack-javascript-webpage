@@ -1,9 +1,7 @@
-//variables used
+
 var suits = ['C', 'S', 'H', 'D'];
 var ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'];
 var card_size = [72, 96];
-
-var money = 100;
 
 //card Object
 function Card(suit, rank){
@@ -15,10 +13,11 @@ Card.prototype.drawCard = function(card){
   ctx.drawImage(img, (card_size[0] * ranks.indexOf(this.rank)), (card_size[1] * suits.indexOf(this.suit)) , card_size[0], card_size[1], x_start, y_start, card_size[0], card_size[1])
 }
 //hand object
-function Hand(){
+function Hand(user) {
   this.hand = [];
   this.value = 0;
   this.hasAce = false;
+  this.user = user;
 }
 //adds a card to the hand
 Hand.prototype.addCard = function(card){
@@ -40,6 +39,11 @@ Hand.prototype.getValue = function(){
 }
 Hand.prototype.drawHand = function(){
   x_start = 0;
+  if (this.user === "Player"){
+    y_start = 304;
+  }else if (this.user === "Dealer"){
+    y_start = 0;
+  }
   for(var i = 0; i < this.hand.length; i ++){
     this.hand[i].drawCard();
     x_start += 80;
@@ -71,49 +75,69 @@ Deck.prototype.deal = function(){
 //game logic
 //resets variables and starts a new game
 function newGame(){
+  inPlay = false;
+  money = 100;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.font = "30px Arial";
   ctx.fillText('Chips:',600,50);
   ctx.fillText('$' + money,600,80);
-  money = 100;
-  deck = new Deck();
-  deck.shuffle();
-  playerHand = new Hand();
-  dealerHand = new Hand();
+}
 
-}
 function deal(bet){
-  bet = bet
-  money -= bet;
-  ctx.clearRect(600, 0, canvas.width, 80);
-  ctx.fillText('Chips:',600,50);
-  ctx.fillText('$' + money,600,80);
-  hit(playerHand, "Player");
-  hit(playerHand, "Player");
-  hit(dealerHand, "Dealer");
-  hit(dealerHand, "Dealer");
-  $("#hit").show();
-  $("#bet").hide();
-}
-function hit(hand, user){
-  if (user === "Player"){
-    y_start = 304;
-  }else if (user === "Dealer"){
-    y_start = 0;
+  if(!inPlay){
+    inPlay = true;
+    currentBet = bet
+    money -= currentBet;
+    deck = new Deck();
+    playerHand = new Hand("Player");
+    dealerHand = new Hand("Dealer");
+    console.log(currentBet)
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillText('Chips:',600,50);
+    ctx.fillText('$' + money,600,80);
+    ctx.fillText('Bet:',600,300);
+    ctx.fillText('$' + currentBet,600,330);
+    deck.shuffle();
+
+    hit(playerHand);
+    hit(playerHand);
+    hit(dealerHand);
+    hit(dealerHand);
   }
-  if(hand.value < 21){
-    hand.addCard(deck.deal())
-    hand.getValue();
-    hand.drawHand();
-    if(hand.value > 21){
-      ctx.fillText(user + "Busted",canvas.width/2, canvas.height/2);
+}
+function hit(hand){
+  if(inPlay){
+    if(hand.value < 21){
+      hand.addCard(deck.deal())
+      hand.getValue();
+      hand.drawHand();
+      if(hand.value > 21){
+        ctx.fillText(hand.user + " Busted",canvas.width/2, canvas.height/2);
+        inPlay = false;
+      }
     }
   }
 }
 function stand(){
-  while(dealerHand.getValue() < 17){
-    dealerHand.addCard(deck.deal())
-    dealerHand.drawHand()
+  if(inPlay){
+    inPlay = false;
+    while(dealerHand.getValue() < 17){
+      dealerHand.addCard(deck.deal())
+      dealerHand.drawHand()
+    }if (dealerHand.value === 21){
+      ctx.fillText("Dealer Wins",canvas.width/2, canvas.height/2);
+    }else if (dealerHand.value > 21){
+      ctx.fillText("Dealer Busted",canvas.width/2, canvas.height/2);
+      money += (2*currentBet)
+      ctx.fillText('+ $' +(2* currentBet) ,600,110)
+    }else if (playerHand.value > dealerHand.value){
+      ctx.fillText("Player Wins",canvas.width/2, canvas.height/2);
+      money += (2*currentBet)
+      ctx.fillText('+ $' +(2* currentBet) ,600,110)
+    }else if (playerHand.value < dealerHand.value|| playerHand.value === dealerHand.value){
+      ctx.fillText("Dealer Wins",canvas.width/2, canvas.height/2);
+    }
   }
 }
 
@@ -124,13 +148,17 @@ $(document).ready(function(){
   canvas = document.getElementById("myCanvas");
   ctx = canvas.getContext("2d");
   img = document.getElementById("cards");
+  money = 100;
+  ctx.font = "30px Arial";
+  ctx.fillText('Chips:',600,50);
+  ctx.fillText('$' + money,600,80);
 
 
   $("#newGameButton").click(function(){
     newGame();
   });
   $("#hitButton").click(function(){
-    hit(playerHand, "Player");
+    hit(playerHand);
   });
   $("#standButton").click(function(){
     stand();

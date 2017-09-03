@@ -10,6 +10,6 @@
 body{
   text-align: center;
 }
-#hit {
-  display: none;
+#bet {
+  display: inline-block;
 }
