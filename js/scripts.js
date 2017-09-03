@@ -2,8 +2,7 @@
 var suits = ['C', 'S', 'H', 'D'];
 var ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'];
 var card_size = [72, 96];
-var x_start = 0
-var y_start = 304
+
 var money = 100;
 
 //card Object
@@ -89,12 +88,19 @@ function deal(bet){
   ctx.clearRect(600, 0, canvas.width, 80);
   ctx.fillText('Chips:',600,50);
   ctx.fillText('$' + money,600,80);
-  hit(playerHand, "player");
-  hit(playerHand, "player");
+  hit(playerHand, "Player");
+  hit(playerHand, "Player");
+  hit(dealerHand, "Dealer");
+  hit(dealerHand, "Dealer");
   $("#hit").show();
   $("#bet").hide();
 }
 function hit(hand, user){
+  if (user === "Player"){
+    y_start = 304;
+  }else if (user === "Dealer"){
+    y_start = 0;
+  }
   if(hand.value < 21){
     hand.addCard(deck.deal())
     hand.getValue();
@@ -104,9 +110,12 @@ function hit(hand, user){
     }
   }
 }
-// function stand(){
-//   if()
-// }
+function stand(){
+  while(dealerHand.getValue() < 17){
+    dealerHand.addCard(deck.deal())
+    dealerHand.drawHand()
+  }
+}
 
 
 //front end
@@ -121,10 +130,10 @@ $(document).ready(function(){
     newGame();
   });
   $("#hitButton").click(function(){
-    hit(playerHand, "player");
+    hit(playerHand, "Player");
   });
   $("#standButton").click(function(){
-
+    stand();
   });
   $("#bet5").click(function(){
     deal(5);
