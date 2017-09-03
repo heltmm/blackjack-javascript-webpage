@@ -3,7 +3,8 @@ var suits = ['C', 'S', 'H', 'D'];
 var ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'];
 var card_size = [72, 96];
 var x_start = 0
-var y_start = 0
+var y_start = 304
+var money = 100;
 
 //card Object
 function Card(suit, rank){
@@ -72,27 +73,41 @@ Deck.prototype.deal = function(){
 //resets variables and starts a new game
 function newGame(){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.font = "30px Arial";
+  ctx.fillText('Chips:',600,50);
+  ctx.fillText('$' + money,600,80);
   money = 100;
   deck = new Deck();
   deck.shuffle();
   playerHand = new Hand();
   dealerHand = new Hand();
-  $("#cash").html(money)
+
 }
 function deal(bet){
   bet = bet
   money -= bet;
-  $("#cash").html(money)
-  hit();
-  hit();
+  ctx.clearRect(600, 0, canvas.width, 80);
+  ctx.fillText('Chips:',600,50);
+  ctx.fillText('$' + money,600,80);
+  hit(playerHand, "player");
+  hit(playerHand, "player");
+  $("#hit").show();
+  $("#bet").hide();
 }
-function hit(){
-  if(playerHand.value < 21){
-    playerHand.addCard(deck.deal())
-    playerHand.getValue();
-    playerHand.drawHand();
+function hit(hand, user){
+  if(hand.value < 21){
+    hand.addCard(deck.deal())
+    hand.getValue();
+    hand.drawHand();
+    if(hand.value > 21){
+      ctx.fillText(user + "Busted",canvas.width/2, canvas.height/2);
+    }
   }
 }
+// function stand(){
+//   if()
+// }
+
 
 //front end
 $(document).ready(function(){
@@ -101,11 +116,12 @@ $(document).ready(function(){
   ctx = canvas.getContext("2d");
   img = document.getElementById("cards");
 
+
   $("#newGameButton").click(function(){
     newGame();
   });
   $("#hitButton").click(function(){
-    hit();
+    hit(playerHand, "player");
   });
   $("#standButton").click(function(){
 
